@@ -24,35 +24,10 @@ class LoginCubit extends Cubit<LoginState> {
         print('Wrong password provided for that user.');
         emit(LoginFailure("Wrong password provided for that user."));
       }
+      else {
+        emit(LoginFailure(e.toString()));
+      }
     }
   }
 
-  passwordValidator(String value) {
-    if (value.isEmpty) {
-      return "please Enter Email";
-    }
-    if (value.length < 6) {
-      return " password must be at least 6 characters ";
-    }
-    bool passwordValid =
-        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
-            .hasMatch(value);
-    if (!passwordValid) {
-      return "password not valid";
-    }
-    return null;
-  }
-
-  emailValidator(String value) {
-    if (value.isEmpty) {
-      return "please Enter Email";
-    }
-    bool emailValid = RegExp(
-            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-        .hasMatch(value);
-    if (!emailValid) {
-      return "email not valid";
-    }
-    return null;
-  }
 }

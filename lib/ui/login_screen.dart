@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutterfirecourse/cubits/login/login_cubit.dart';
+import 'package:flutterfirecourse/business_logic/cubits/login/login_cubit.dart';
+import 'package:flutterfirecourse/business_logic/cubits/register/register_cubit.dart';
+import 'package:flutterfirecourse/business_logic/validators.dart';
 import 'package:flutterfirecourse/ui/compnents.dart';
 import 'package:flutterfirecourse/ui/home_screen.dart';
 import 'package:flutterfirecourse/ui/register_screen.dart';
@@ -57,7 +59,7 @@ class _ShopLoginScreenState extends State<ShopLoginScreen> {
                 Text(
                   "LOGIN",
                   style:
-                      TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
+                  TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: 15.sp,
@@ -74,8 +76,7 @@ class _ShopLoginScreenState extends State<ShopLoginScreen> {
                 ),
                 myshopTextFormField(
                     label: "ُEmail Address",
-                    validator: (value) =>
-                        loginCubit.emailValidator(value.toString()),
+                    validator: (value) => emailValidator(value.toString()),
                     controller: emailController,
                     prefixIcon: Icons.email,
                     keyboardType: TextInputType.emailAddress),
@@ -84,8 +85,7 @@ class _ShopLoginScreenState extends State<ShopLoginScreen> {
                 ),
                 myshopTextFormField(
                     label: "Password",
-                    validator: (value) =>
-                        loginCubit.passwordValidator(value.toString()),
+                    validator: (value) => passwordValidator(value.toString()),
                     controller: passwordController,
                     prefixIcon: Icons.lock,
                     obscureText: isPasswordVisable,
@@ -125,7 +125,11 @@ class _ShopLoginScreenState extends State<ShopLoginScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ShopRegisterScreen(),
+                                builder: (context) =>
+                                    BlocProvider(
+                                      create: (context) => RegisterCubit(),
+                                      child: ShopRegisterScreen(),
+                                    ),
                               ));
                         },
                         child: Text(
@@ -153,13 +157,13 @@ class _ShopLoginScreenState extends State<ShopLoginScreen> {
         },
         child: isPasswordVisable
             ? Icon(
-                Icons.visibility_off,
-                size: 22.sp,
-              )
+          Icons.visibility_off,
+          size: 22.sp,
+        )
             : Icon(
-                Icons.visibility,
-                size: 22.sp,
-              ));
+          Icons.visibility,
+          size: 22.sp,
+        ));
   }
 
   void onLoginSuccess() {
