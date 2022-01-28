@@ -1,13 +1,19 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterfirecourse/cubits/login/login_cubit.dart';
 import 'package:flutterfirecourse/ui/home_screen.dart';
 import 'package:flutterfirecourse/ui/login_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(DevicePreview(
-    enabled: true,
+    enabled: false,
     builder: (context) => MyApp(),
   ));
 }
@@ -18,7 +24,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       useInheritedMediaQuery: true,
       locale: DevicePreview.locale(context),
@@ -27,15 +32,19 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         focusColor: Colors.white,
-        textTheme: TextTheme(
-          bodyText1: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          )
-        ),
+        textTheme: const TextTheme(
+            bodyText1: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        )),
         primarySwatch: Colors.blue,
       ),
-      home: ResponsiveSizer(builder: (p0, p1, p2) => const ShopLoginScreen(),),
+      home: ResponsiveSizer(
+        builder: (p0, p1, p2) => BlocProvider(
+          create: (context) => LoginCubit(),
+          child: ShopLoginScreen(),
+        ),
+      ),
     );
   }
 }

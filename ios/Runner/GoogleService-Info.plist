@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>386849322935-s09tjkqq48f3o8cq9k05s656d06u8lfi.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.386849322935-s09tjkqq48f3o8cq9k05s656d06u8lfi</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>386849322935-d5f6900kddst5d3ighmtnfjetav17b73.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAVMAmywu2dn022TPFVMNfxGvZArDof-3c</string>
+	<key>GCM_SENDER_ID</key>
+	<string>386849322935</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.flutterfirecourse</string>
+	<key>PROJECT_ID</key>
+	<string>seniorstepsfirebase</string>
+	<key>STORAGE_BUCKET</key>
+	<string>seniorstepsfirebase.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:386849322935:ios:0b6e1869a3e2d502319a32</string>
+	<key>DATABASE_URL</key>
+	<string>https://seniorstepsfirebase.firebaseio.com</string>
+</dict>
+</plist>
