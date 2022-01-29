@@ -59,7 +59,7 @@ class _ShopLoginScreenState extends State<ShopLoginScreen> {
                 Text(
                   "LOGIN",
                   style:
-                  TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: 15.sp,
@@ -125,11 +125,7 @@ class _ShopLoginScreenState extends State<ShopLoginScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    BlocProvider(
-                                      create: (context) => RegisterCubit(),
-                                      child: ShopRegisterScreen(),
-                                    ),
+                                builder: (context) => ShopRegisterScreen(),
                               ));
                         },
                         child: Text(
@@ -157,13 +153,13 @@ class _ShopLoginScreenState extends State<ShopLoginScreen> {
         },
         child: isPasswordVisable
             ? Icon(
-          Icons.visibility_off,
-          size: 22.sp,
-        )
+                Icons.visibility_off,
+                size: 22.sp,
+              )
             : Icon(
-          Icons.visibility,
-          size: 22.sp,
-        ));
+                Icons.visibility,
+                size: 22.sp,
+              ));
   }
 
   void onLoginSuccess() {

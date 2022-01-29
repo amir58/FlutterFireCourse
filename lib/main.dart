@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfirecourse/business_logic/cubits/register/register_cubit.dart';
 import 'package:flutterfirecourse/ui/login_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-
 import 'business_logic/cubits/login/login_cubit.dart';
 
 void main() async {
@@ -27,9 +26,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider(
-            create: (context) => LoginCubit(),
-          ),
+          BlocProvider(create: (context) => LoginCubit()),
+          BlocProvider(create: (context) => RegisterCubit())
         ],
         child: MaterialApp(
           useInheritedMediaQuery: true,

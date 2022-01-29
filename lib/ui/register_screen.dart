@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfirecourse/business_logic/cubits/register/register_cubit.dart';
 import 'package:flutterfirecourse/business_logic/validators.dart';
 import 'package:flutterfirecourse/ui/compnents.dart';
+import 'package:flutterfirecourse/ui/home_screen.dart';
 import 'package:flutterfirecourse/ui/login_screen.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/src/provider.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ShopRegisterScreen extends StatefulWidget {
   ShopRegisterScreen({Key? key}) : super(key: key);
@@ -42,7 +47,7 @@ class _ShopRegisterScreenState extends State<ShopRegisterScreen> {
         if (state is RegisterSuccessState) {
           onRegisterSuccess();
         } else if (state is RegisterFailureState) {
-          onRegisterFailure(state.errorMessage);
+          showSnackBar(state.errorMessage);
         }
       },
       child: Scaffold(
@@ -81,6 +86,10 @@ class _ShopRegisterScreenState extends State<ShopRegisterScreen> {
                 ),
                 const SizedBox(
                   height: 18,
+                ),
+                buildProfileImage(),
+                SizedBox(
+                  height: 18.sp,
                 ),
                 myshopTextFormField(
                   label: "User Name",
@@ -132,20 +141,23 @@ class _ShopRegisterScreenState extends State<ShopRegisterScreen> {
   }
 
   void register() {
+    if (image == null) {
+      showSnackBar("Select image!");
+      return;
+    }
     if (formKey.currentState!.validate()) {
       registerCubit.register(
+        username: userNameController.text,
         email: emailController.text,
         password: passwordController.text,
+        phone: phoneController.text,
+        imageFile: File(image!.path),
       );
     }
   }
 
   void onRegisterSuccess() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const ShopLoginScreen(),
-        ));
+    Navigator.pop(context);
   }
 
   Widget myiconwidg() {
@@ -159,7 +171,7 @@ class _ShopRegisterScreenState extends State<ShopRegisterScreen> {
             : const Icon(Icons.visibility));
   }
 
-  void onRegisterFailure(String errorMessage) {
+  void showSnackBar(String errorMessage) {
     SnackBar snackBar = SnackBar(
       content: Text(errorMessage),
       action: SnackBarAction(
@@ -171,4 +183,33 @@ class _ShopRegisterScreenState extends State<ShopRegisterScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  XFile? image;
+
+  buildProfileImage() {
+    return InkWell(
+      onTap: () async {
+        final ImagePicker _picker = ImagePicker();
+        image = await _picker.pickImage(source: ImageSource.gallery);
+        setState(() {});
+      },
+      child: image == null
+          ? CircleAvatar(
+              radius: 25.sp,
+              child: Icon(
+                Icons.person,
+                size: 33.sp,
+              ))
+          : Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(35.sp),
+                child: Image.file(
+                  File(image!.path),
+                  fit: BoxFit.fill,
+                  width: 35.sp,
+                  height: 35.sp,
+                ),
+              ),
+            ),
+    );
+  }
 }
