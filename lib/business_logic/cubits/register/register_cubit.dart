@@ -92,4 +92,6 @@ class RegisterCubit extends Cubit<RegisterState> {
       emit(RegisterFailureState(error.toString()));
     });
   }
+
+
 }

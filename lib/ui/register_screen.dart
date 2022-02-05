@@ -8,8 +8,9 @@ import 'package:flutterfirecourse/ui/compnents.dart';
 import 'package:flutterfirecourse/ui/home_screen.dart';
 import 'package:flutterfirecourse/ui/login_screen.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/src/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+
+import 'my_snack_bar.dart';
 
 class ShopRegisterScreen extends StatefulWidget {
   ShopRegisterScreen({Key? key}) : super(key: key);
@@ -47,7 +48,7 @@ class _ShopRegisterScreenState extends State<ShopRegisterScreen> {
         if (state is RegisterSuccessState) {
           onRegisterSuccess();
         } else if (state is RegisterFailureState) {
-          showSnackBar(state.errorMessage);
+          showSnackBar(context, state.errorMessage);
         }
       },
       child: Scaffold(
@@ -71,8 +72,7 @@ class _ShopRegisterScreenState extends State<ShopRegisterScreen> {
               children: [
                 const Text(
                   "REGISTER",
-                  style: const TextStyle(
-                      fontSize: 33, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
                   height: 10,
@@ -142,7 +142,7 @@ class _ShopRegisterScreenState extends State<ShopRegisterScreen> {
 
   void register() {
     if (image == null) {
-      showSnackBar("Select image!");
+      showSnackBar(context, "Select image!");
       return;
     }
     if (formKey.currentState!.validate()) {
@@ -169,18 +169,6 @@ class _ShopRegisterScreenState extends State<ShopRegisterScreen> {
         child: isPasswordVisable
             ? const Icon(Icons.visibility_off)
             : const Icon(Icons.visibility));
-  }
-
-  void showSnackBar(String errorMessage) {
-    SnackBar snackBar = SnackBar(
-      content: Text(errorMessage),
-      action: SnackBarAction(
-        label: 'Ok',
-        onPressed: () {},
-      ),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   XFile? image;

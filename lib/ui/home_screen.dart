@@ -208,7 +208,7 @@ class HomeScreen extends StatelessWidget {
                       height: 4,
                     ),
                     Text(
-                      "Meeru island resort & spa Meeru island resort & spa",
+                      "Meeru island resort & spa",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(color: Colors.white),

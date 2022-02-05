@@ -46,3 +46,8 @@ usernameValidator(String value) {
   }
   return null;
 }
+
+isMyFormEmpty(String value) {
+  if (value.isEmpty) return "Required";
+  return null;
+}

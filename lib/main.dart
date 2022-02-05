@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterfirecourse/business_logic/cubits/add_post/add_post_cubit.dart';
 import 'package:flutterfirecourse/business_logic/cubits/register/register_cubit.dart';
 import 'package:flutterfirecourse/ui/login_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => LoginCubit()),
-          BlocProvider(create: (context) => RegisterCubit())
+          BlocProvider(create: (context) => RegisterCubit()),
+          BlocProvider(create: (context) => AddPostCubit()),
         ],
         child: MaterialApp(
           useInheritedMediaQuery: true,
