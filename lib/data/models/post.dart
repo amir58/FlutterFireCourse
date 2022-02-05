@@ -31,7 +31,7 @@ class Post {
         "https://firebasestorage.googleapis.com/v0/b/seniorstepsfirebase.appspot.com/o/profileImages%2FYItDENmtKFPxFDnoDjU6U4ZZrQN2?alt=media&token=8a07664c-4fc1-48d5-899d-1adae9bf4cac";
   }
 
-  Post.fromJson(Map<String, Object> json)
+  Post.fromJson(Map<String, dynamic> json)
       : this(
           postId: json['postId']! as String,
           userId: json['userId']! as String,

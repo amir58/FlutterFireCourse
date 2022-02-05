@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
+import 'package:flutterfirecourse/business_logic/cubits/posts/posts_cubit.dart';
+import 'package:flutterfirecourse/data/models/post.dart';
 import 'package:flutterfirecourse/ui/comments_screen.dart';
 import 'package:flutterfirecourse/ui/post_screen.dart';
 import 'package:flutterfirecourse/ui/story_screen.dart';
@@ -10,15 +13,23 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 class HomeScreen extends StatelessWidget {
   late BuildContext context;
+  late PostsCubit cubit;
 
   @override
   Widget build(BuildContext context) {
     this.context = context;
+    cubit = BlocProvider.of<PostsCubit>(context);
+    cubit.getPosts();
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: screenAppBar(),
-      body: screenBody(),
+    return BlocListener<PostsCubit, PostsState>(
+      listener: (context, state) {
+        print("Home state => $state");
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: screenAppBar(),
+        body: screenBody(),
+      ),
     );
   }
 
@@ -47,14 +58,26 @@ class HomeScreen extends StatelessWidget {
             height: 0.1,
             thickness: 0.1,
           ),
-          ListView.separated(
-              shrinkWrap: true,
-              physics: const ScrollPhysics(),
-              itemBuilder: (context, index) => buildPostItem(),
-              separatorBuilder: (context, index) => const SizedBox(height: 8),
-              itemCount: 20)
+          postsListView(),
         ],
       );
+
+  Widget postsListView() {
+    return BlocBuilder<PostsCubit, PostsState>(
+      buildWhen: (previous, current) {
+        return current is PostsGetSuccessState;
+      },
+      builder: (context, state) {
+        return ListView.separated(
+          shrinkWrap: true,
+          physics: const ScrollPhysics(),
+          itemBuilder: (context, index) => buildPostItem(cubit.posts[index]),
+          separatorBuilder: (context, index) => const SizedBox(height: 8),
+          itemCount: cubit.posts.length,
+        );
+      },
+    );
+  }
 
   buildStories() {
     return Padding(
@@ -157,7 +180,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  buildPostItem() {
+  buildPostItem(Post post) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -165,30 +188,26 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              InkWell(
-                onTap: () => onAddStoryTapped(),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 26,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(colors: [
-                              Color(0xff833ab4),
-                              Color(0xfffd1d1d),
-                              Color(0xfffcb045),
-                            ])),
-                      ),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 26,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(colors: [
+                            Color(0xff833ab4),
+                            Color(0xfffd1d1d),
+                            Color(0xfffcb045),
+                          ])),
                     ),
-                    const CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          "https://wirepicker.com/wp-content/uploads/2021/09/android-vs-ios_1200x675.jpg"),
-                      radius: 23,
-                    ),
-                  ],
-                ),
+                  ),
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(post.userImageUrl),
+                    radius: 23,
+                  ),
+                ],
               ),
               const SizedBox(
                 width: 5,
@@ -196,22 +215,24 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
-                      "Amir Mohammed",
+                      post.username,
+                      // "Amir Mohammed",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
                     Text(
-                      "Meeru island resort & spa",
+                      post.locationName,
+                      // "Meeru island resort & spa",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ],
                 ),
@@ -229,8 +250,10 @@ class HomeScreen extends StatelessWidget {
             height: 30.h,
             width: double.infinity,
             fit: BoxFit.cover,
-            image: const NetworkImage(
-                "https://wirepicker.com/wp-content/uploads/2021/09/android-vs-ios_1200x675.jpg")),
+            image: NetworkImage(
+              post.postImageUrl,
+              // "https://wirepicker.com/wp-content/uploads/2021/09/android-vs-ios_1200x675.jpg",
+            )),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Row(
@@ -246,7 +269,7 @@ class HomeScreen extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CommentsScreen(),
+                          builder: (context) => const CommentsScreen(),
                         ));
                   },
                   icon: const Icon(
@@ -282,12 +305,12 @@ class HomeScreen extends StatelessWidget {
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 23.0),
             child: RichText(
-                text: const TextSpan(children: [
+                text: TextSpan(children: [
               TextSpan(
-                  text: 'AmirMohammed',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(
-                  text: '  some location area name..some location area name..')
+                  text: post.username,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              const TextSpan(text: " "),
+              TextSpan(text: post.postContent)
             ]))),
       ],
     );
@@ -313,7 +336,7 @@ class HomeScreen extends StatelessWidget {
     showMenu<String>(
       color: const Color(0xE6000000),
       context: context,
-      position: RelativeRect.fromLTRB(100, 80, 99.8, 100),
+      position: const RelativeRect.fromLTRB(100, 80, 99.8, 100),
       //position where you want to show the menu on screen
       shape: OutlineInputBorder(
         borderRadius: BorderRadius.circular(15),
@@ -332,8 +355,8 @@ class HomeScreen extends StatelessWidget {
                 'Post',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
-              Spacer(),
-              SizedBox(
+              const Spacer(),
+              const SizedBox(
                 width: 8,
               ),
               Icon(MaterialIcons.post_add, color: Theme.of(context).focusColor),
@@ -349,7 +372,7 @@ class HomeScreen extends StatelessWidget {
                   'Story',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                Spacer(),
+                const Spacer(),
                 Icon(MaterialCommunityIcons.plus_circle_outline,
                     color: Theme.of(context).focusColor),
               ],
@@ -365,7 +388,7 @@ class HomeScreen extends StatelessWidget {
                   'Reel',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                Spacer(),
+                const Spacer(),
                 Icon(MaterialIcons.live_tv,
                     color: Theme.of(context).focusColor),
               ],
@@ -381,7 +404,7 @@ class HomeScreen extends StatelessWidget {
                   'Live',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                Spacer(),
+                const Spacer(),
                 Icon(Fontisto.livestream, color: Theme.of(context).focusColor),
               ],
             ),
