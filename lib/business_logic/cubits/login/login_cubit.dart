@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutterfirecourse/data/local/my_shared.dart';
+import 'package:flutterfirecourse/data/models/user.dart';
 import 'package:meta/meta.dart';
 
 part 'login_state.dart';
@@ -15,7 +20,7 @@ class LoginCubit extends Cubit<LoginState> {
         password: password,
       );
 
-      emit(LoginSuccess());
+      getUserData();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -23,11 +28,34 @@ class LoginCubit extends Cubit<LoginState> {
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
         emit(LoginFailure("Wrong password provided for that user."));
-      }
-      else {
+      } else {
         emit(LoginFailure(e.toString()));
       }
     }
   }
 
+  void getUserData() {
+    FirebaseFirestore.instance
+        .collection("flutterUsers")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then(
+          (value) {
+            if(value.data() == null) return;
+
+            var user = MyUser.fromJson(value.data());
+
+            saveUserData(user);
+          },
+        );
+  }
+
+  void saveUserData(MyUser user) {
+    MyShared.putString(key: "user", value: jsonEncode(user));
+
+    MyShared.putString(key: "username", value: user.username);
+    MyShared.putString(key: "profileImageUrl", value: user.profileImageUrl);
+
+    emit(LoginSuccess());
+  }
 }

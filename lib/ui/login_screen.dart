@@ -11,14 +11,14 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 // BlocConsumer => listener , builder
 // BlocBuilder , BlocListener
 
-class ShopLoginScreen extends StatefulWidget {
-  const ShopLoginScreen({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  _ShopLoginScreenState createState() => _ShopLoginScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _ShopLoginScreenState extends State<ShopLoginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   var emailController = TextEditingController();
 
   var passwordController = TextEditingController();

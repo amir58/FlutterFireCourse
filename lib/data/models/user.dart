@@ -11,9 +11,9 @@ class MyUser {
     required this.profileImageUrl,
   });
 
-  MyUser.fromJson(Map<String, Object> json)
+  MyUser.fromJson(Map<String, dynamic>? json)
       : this(
-          username: json['username']! as String,
+          username: json!['username']! as String,
           email: json['email']! as String,
           phone: json['phone']! as String,
           profileImageUrl: json['profileImageUrl']! as String,

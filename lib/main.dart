@@ -5,12 +5,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfirecourse/business_logic/cubits/add_post/add_post_cubit.dart';
 import 'package:flutterfirecourse/business_logic/cubits/posts/posts_cubit.dart';
 import 'package:flutterfirecourse/business_logic/cubits/register/register_cubit.dart';
+import 'package:flutterfirecourse/data/local/my_shared.dart';
 import 'package:flutterfirecourse/ui/login_screen.dart';
+import 'package:flutterfirecourse/ui/splash_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'business_logic/cubits/login/login_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await MyShared.init();
   await Firebase.initializeApp();
 
   runApp(DevicePreview(
@@ -49,7 +52,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           home: ResponsiveSizer(
-            builder: (p0, p1, p2) => ShopLoginScreen(),
+            builder: (p0, p1, p2) => SplashScreen(),
           ),
         ));
   }
