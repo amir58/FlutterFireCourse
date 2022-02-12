@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutterfirecourse/data/local/my_shared.dart';
 
 class Post {
   late String postId;
@@ -23,12 +24,23 @@ class Post {
     this.locationName = "Meeru island resort & spa",
     this.latitude = 0.0,
     this.longitude = 0.0,
+  });
+
+  Post.newInstance({
+    required this.postContent,
+    this.username = "",
+    this.postImageUrl = "",
+    this.postId = "",
+    this.userId = "",
+    this.userImageUrl = "",
+    this.locationName = "Meeru island resort & spa",
+    this.latitude = 0.0,
+    this.longitude = 0.0,
   }) {
     postId = FirebaseAuth.instance.currentUser!.uid + DateTime.now().toString();
     userId = FirebaseAuth.instance.currentUser!.uid;
-    username = "Amir Moahmmed";
-    userImageUrl =
-        "https://firebasestorage.googleapis.com/v0/b/seniorstepsfirebase.appspot.com/o/profileImages%2FYItDENmtKFPxFDnoDjU6U4ZZrQN2?alt=media&token=8a07664c-4fc1-48d5-899d-1adae9bf4cac";
+    username = MyShared.getString(key: "username");
+    userImageUrl = MyShared.getString(key: "profileImageUrl");
   }
 
   Post.fromJson(Map<String, dynamic> json)

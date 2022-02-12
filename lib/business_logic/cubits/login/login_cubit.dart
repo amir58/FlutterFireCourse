@@ -40,14 +40,15 @@ class LoginCubit extends Cubit<LoginState> {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get()
         .then(
-          (value) {
-            if(value.data() == null) return;
+      (value) {
+        print('user data => ${value.data()}');
+        if (value.data() == null) return;
 
-            var user = MyUser.fromJson(value.data());
+        var user = MyUser.fromJson(value.data());
 
-            saveUserData(user);
-          },
-        );
+        saveUserData(user);
+      },
+    );
   }
 
   void saveUserData(MyUser user) {

@@ -5,12 +5,12 @@ passwordValidator(String value) {
   if (value.length < 6) {
     return " password must be at least 6 characters ";
   }
-  bool passwordValid =
-      RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
-          .hasMatch(value);
-  if (!passwordValid) {
-    return "password not valid";
-  }
+  // bool passwordValid =
+  //     RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+  //         .hasMatch(value);
+  // if (!passwordValid) {
+  //   return "password not valid";
+  // }
   return null;
 }
 

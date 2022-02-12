@@ -269,7 +269,7 @@ class HomeScreen extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const CommentsScreen(),
+                          builder: (context) => CommentsScreen(postId: post.postId),
                         ));
                   },
                   icon: const Icon(

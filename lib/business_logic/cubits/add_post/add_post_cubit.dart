@@ -15,7 +15,7 @@ class AddPostCubit extends Cubit<AddPostState> {
   late Post _post;
 
   void addPost({required String postContent, required File imageFile}) {
-    _post = Post(postContent: postContent);
+    _post = Post.newInstance(postContent: postContent);
 
     print(_post.toJson());
     _uploadImage(imageFile);
