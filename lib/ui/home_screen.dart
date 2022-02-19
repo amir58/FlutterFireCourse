@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutterfirecourse/business_logic/cubits/posts/posts_cubit.dart';
 import 'package:flutterfirecourse/data/models/post.dart';
+import 'package:flutterfirecourse/data/models/story.dart';
 import 'package:flutterfirecourse/ui/comments_screen.dart';
+import 'package:flutterfirecourse/ui/my_snack_bar.dart';
 import 'package:flutterfirecourse/ui/post_screen.dart';
 import 'package:flutterfirecourse/ui/story_screen.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,10 +22,17 @@ class HomeScreen extends StatelessWidget {
     this.context = context;
     cubit = BlocProvider.of<PostsCubit>(context);
     cubit.getPosts();
+    cubit.getHomeStories();
 
     return BlocListener<PostsCubit, PostsState>(
       listener: (context, state) {
         print("Home state => $state");
+        if(state is GetStoriesDetailsSuccessState){
+          onShowStoryTapped(state.storiesDetails);
+        }
+        else if (state is AddStorySuccessState){
+          showSnackBar(context, "Story added");
+        }
       },
       child: Scaffold(
         backgroundColor: Colors.black,
@@ -127,13 +136,19 @@ class HomeScreen extends StatelessWidget {
           Expanded(
             child: SizedBox(
               height: 110,
-              child: ListView.separated(
-                separatorBuilder: (context, index) => const SizedBox(
-                  width: 10,
-                ),
-                itemBuilder: (context, index) => buildStoryItem(),
-                itemCount: 20,
-                scrollDirection: Axis.horizontal,
+              child: BlocBuilder<PostsCubit, PostsState>(
+                buildWhen: (previous, current) =>
+                    current is GetHomeStoriesSuccessState,
+                builder: (context, state) {
+                  return ListView.separated(
+                    separatorBuilder: (context, index) => const SizedBox(
+                      width: 10,
+                    ),
+                    itemBuilder: (context, index) => buildStoryItem(index),
+                    itemCount: cubit.homeStories.length,
+                    scrollDirection: Axis.horizontal,
+                  );
+                },
               ),
             ),
           )
@@ -142,9 +157,11 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  buildStoryItem() {
+  buildStoryItem(int index) {
+    Story story = cubit.homeStories[index];
+
     return InkWell(
-      onTap: () => onShowStoryTapped(),
+      onTap: () => cubit.getStoriesDetails(story.userId!),
       child: Column(
         children: [
           Stack(
@@ -162,9 +179,8 @@ class HomeScreen extends StatelessWidget {
                       ])),
                 ),
               ),
-              const CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://wirepicker.com/wp-content/uploads/2021/09/android-vs-ios_1200x675.jpg"),
+              CircleAvatar(
+                backgroundImage: NetworkImage(story.userImageUrl!),
                 radius: 33,
               ),
             ],
@@ -172,9 +188,9 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(
             height: 5,
           ),
-          const Text(
-            "Amir",
-            style: TextStyle(color: Colors.white),
+          Text(
+            story.username!,
+            style: const TextStyle(color: Colors.white),
           )
         ],
       ),
@@ -317,7 +333,7 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 23.0),
           child: BlocBuilder<PostsCubit, PostsState>(
             buildWhen: (previous, current) =>
-            current is LikePostSuccessState ||
+                current is LikePostSuccessState ||
                 current is UnLikePostSuccessState,
             builder: (context, state) {
               return Text(
@@ -350,14 +366,16 @@ class HomeScreen extends StatelessWidget {
 
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
-    print(image!.path);
+    // print(image!.path);
 
-    // File file = File(image!.path);
+    File file = File(image!.path);
+
+    cubit.addStory(file);
   }
 
-  onShowStoryTapped() {
+  onShowStoryTapped(List<Story> storiesDetails) {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => StoryScreen(),
+      builder: (context) => StoryScreen(storiesDetails),
     ));
   }
 
