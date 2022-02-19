@@ -71,7 +71,8 @@ class HomeScreen extends StatelessWidget {
         return ListView.separated(
           shrinkWrap: true,
           physics: const ScrollPhysics(),
-          itemBuilder: (context, index) => buildPostItem(cubit.posts[index]),
+          itemBuilder: (context, index) =>
+              buildPostItem(cubit.posts[index], index),
           separatorBuilder: (context, index) => const SizedBox(height: 8),
           itemCount: cubit.posts.length,
         );
@@ -180,7 +181,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  buildPostItem(Post post) {
+  buildPostItem(Post post, int index) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -258,18 +259,38 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Row(
             children: [
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.favorite_border,
-                    color: Colors.white,
-                  )),
+              BlocBuilder<PostsCubit, PostsState>(
+                buildWhen: (previous, current) =>
+                    current is LikePostSuccessState ||
+                    current is UnLikePostSuccessState,
+                builder: (context, state) {
+                  return IconButton(
+                      onPressed: () {
+                        if (cubit.posts[index].isLiked) {
+                          cubit.posts[index].likesCount--;
+                          cubit.posts[index].isLiked = false;
+                          cubit.unLikePost(post.postId);
+                        } else {
+                          cubit.posts[index].likesCount++;
+                          cubit.posts[index].isLiked = true;
+                          cubit.likePost(post.postId);
+                        }
+                      },
+                      icon: Icon(
+                        cubit.posts[index].isLiked
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: Colors.white,
+                      ));
+                },
+              ),
               IconButton(
                   onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CommentsScreen(postId: post.postId),
+                          builder: (context) =>
+                              CommentsScreen(postId: post.postId),
                         ));
                   },
                   icon: const Icon(
@@ -292,11 +313,19 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 23.0),
-          child: Text(
-            "17304 Likes",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 23.0),
+          child: BlocBuilder<PostsCubit, PostsState>(
+            buildWhen: (previous, current) =>
+            current is LikePostSuccessState ||
+                current is UnLikePostSuccessState,
+            builder: (context, state) {
+              return Text(
+                "${post.likesCount} Likes",
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              );
+            },
           ),
         ),
         const SizedBox(

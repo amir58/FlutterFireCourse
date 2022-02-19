@@ -13,6 +13,8 @@ class Post {
   final double latitude;
   final double longitude;
   final String locationName;
+  bool isLiked = false;
+  int likesCount = 0;
 
   Post({
     required this.postContent,
