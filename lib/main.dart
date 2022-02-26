@@ -3,9 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfirecourse/business_logic/cubits/add_post/add_post_cubit.dart';
+import 'package:flutterfirecourse/business_logic/cubits/chatting/chatting_cubit.dart';
 import 'package:flutterfirecourse/business_logic/cubits/comments/comments_cubit.dart';
 import 'package:flutterfirecourse/business_logic/cubits/posts/posts_cubit.dart';
 import 'package:flutterfirecourse/business_logic/cubits/register/register_cubit.dart';
+import 'package:flutterfirecourse/business_logic/cubits/users/users_cubit.dart';
 import 'package:flutterfirecourse/data/local/my_shared.dart';
 import 'package:flutterfirecourse/ui/splash_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -36,6 +38,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => AddPostCubit()),
           BlocProvider(create: (context) => PostsCubit()),
           BlocProvider(create: (context) => CommentsCubit()),
+          BlocProvider(create: (context) => UsersCubit()),
+          BlocProvider(create: (context) => ChattingCubit()),
         ],
         child: MaterialApp(
           useInheritedMediaQuery: true,

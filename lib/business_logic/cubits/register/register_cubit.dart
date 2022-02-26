@@ -78,6 +78,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       email: email,
       phone: phone,
       profileImageUrl: imageUrl,
+      userId: FirebaseAuth.instance.currentUser!.uid
     );
 
     print(user.toJson());

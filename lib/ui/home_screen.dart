@@ -10,6 +10,7 @@ import 'package:flutterfirecourse/ui/comments_screen.dart';
 import 'package:flutterfirecourse/ui/my_snack_bar.dart';
 import 'package:flutterfirecourse/ui/post_screen.dart';
 import 'package:flutterfirecourse/ui/story_screen.dart';
+import 'package:flutterfirecourse/ui/users_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -27,10 +28,9 @@ class HomeScreen extends StatelessWidget {
     return BlocListener<PostsCubit, PostsState>(
       listener: (context, state) {
         print("Home state => $state");
-        if(state is GetStoriesDetailsSuccessState){
+        if (state is GetStoriesDetailsSuccessState) {
           onShowStoryTapped(state.storiesDetails);
-        }
-        else if (state is AddStorySuccessState){
+        } else if (state is AddStorySuccessState) {
           showSnackBar(context, "Story added");
         }
       },
@@ -55,7 +55,15 @@ class HomeScreen extends StatelessWidget {
               },
               icon: const Icon(Icons.add_box_outlined)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.chat_outlined)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UsersScreen(),
+                    ));
+              },
+              icon: const Icon(Icons.chat_outlined)),
         ],
       );
 
