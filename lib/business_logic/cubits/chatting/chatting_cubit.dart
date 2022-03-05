@@ -64,10 +64,12 @@ class ChattingCubit extends Cubit<ChattingStates> {
         .snapshots()
         .listen((event) {
       // messages.clear();
-      for (var element in event.docs) {
-        Message message = Message.fromJson(element.data());
-        messages.add(message);
-      }
+
+      print('Docs => ${event.docs.length}');
+
+      Message message = Message.fromJson(event.docs[0].data());
+      messages.add(message);
+
       emit(GetMessagesSuccessState());
     });
   }
