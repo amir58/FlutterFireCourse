@@ -11,6 +11,7 @@ import 'package:flutterfirecourse/business_logic/cubits/posts/posts_cubit.dart';
 import 'package:flutterfirecourse/business_logic/cubits/register/register_cubit.dart';
 import 'package:flutterfirecourse/business_logic/cubits/users/users_cubit.dart';
 import 'package:flutterfirecourse/data/local/my_shared.dart';
+import 'package:flutterfirecourse/ui/map/map_screen.dart';
 import 'package:flutterfirecourse/ui/splash_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'business_logic/cubits/login/login_cubit.dart';
@@ -84,7 +85,7 @@ class _MyAppState extends State<MyApp> {
             primarySwatch: Colors.blue,
           ),
           home: ResponsiveSizer(
-            builder: (p0, p1, p2) => SplashScreen(),
+            builder: (p0, p1, p2) => MapScreen(),
           ),
         ));
   }
