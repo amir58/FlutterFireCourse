@@ -98,16 +98,30 @@ class PostsCubit extends Cubit<PostsState> {
     emit(UnLikePostSuccessState());
   }
 
-  void addStory(File file) async {
+  void addStories(List<File> files) async {
+    int counter =1;
+    for (var file in files) {
+      // 0
+      print('Add story $counter');
+      await addStory(file);
+      print('Story $counter added');
+      counter++;
+    }
+  }
+
+  Future<bool> addStory(File file) async {
     String ref =
         'stories/${FirebaseAuth.instance.currentUser!.uid + DateTime.now().toString()}';
+
     // 1 upload image
     await _uploadImage(file, ref);
     // 2 get image url
     String storyImageUrl = await _getImageUrl(ref);
     print('storyImageUrl => $storyImageUrl');
     // 3 add on firestore
-    await _insertUserData(storyImageUrl);
+    await _insertStoryData(storyImageUrl);
+
+    return true;
   }
 
   Future<bool> _uploadImage(File imageFile, String ref) async {
@@ -128,7 +142,7 @@ class PostsCubit extends Cubit<PostsState> {
     return imageUrl;
   }
 
-  Future<bool> _insertUserData(String storyImageUrl) async {
+  Future<bool> _insertStoryData(String storyImageUrl) async {
     Story story = Story(
       username: MyShared.getString(key: "username"),
       userId: FirebaseAuth.instance.currentUser!.uid,
@@ -149,6 +163,8 @@ class PostsCubit extends Cubit<PostsState> {
         .doc(story.storyTime)
         .set(story.toJson())
         .then((value) {
+
+
       emit(AddStorySuccessState());
       getHomeStories();
       return true;
@@ -184,6 +200,10 @@ class PostsCubit extends Cubit<PostsState> {
         if (isLessThanDay) {
           homeStories.add(story);
         }
+        // else{
+        //   // delete story from firestore
+        //   FirebaseFirestore.instance.collection("stories").doc(story.userId).delete();
+        // }
 
       }
       emit(GetHomeStoriesSuccessState());
@@ -198,7 +218,9 @@ class PostsCubit extends Cubit<PostsState> {
         .get()
         .then((value) {
       print('story docs => ${value.docs.length}');
+      
       storiesDetails.clear();
+      
       for (var element in value.docs) {
         Story story = Story.fromJson(element.data());
 
@@ -217,9 +239,15 @@ class PostsCubit extends Cubit<PostsState> {
         if (isLessThanDay) {
           storiesDetails.add(story);
         }
+        else{
+          FirebaseFirestore.instance.collection("stories").doc(userId)
+              .collection("myStories").doc(story.storyTime).delete();
+        }
       }
       print(storiesDetails.length);
       emit(GetStoriesDetailsSuccessState(storiesDetails));
     });
   }
+
+
 }

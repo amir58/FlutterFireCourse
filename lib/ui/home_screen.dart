@@ -27,10 +27,9 @@ class HomeScreen extends StatelessWidget {
     return BlocListener<PostsCubit, PostsState>(
       listener: (context, state) {
         print("Home state => $state");
-        if(state is GetStoriesDetailsSuccessState){
+        if (state is GetStoriesDetailsSuccessState) {
           onShowStoryTapped(state.storiesDetails);
-        }
-        else if (state is AddStorySuccessState){
+        } else if (state is AddStorySuccessState) {
           showSnackBar(context, "Story added");
         }
       },
@@ -364,13 +363,23 @@ class HomeScreen extends StatelessWidget {
   onAddStoryTapped() async {
     final ImagePicker _picker = ImagePicker();
 
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    // final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    //
+    // File file = File(image!.path);
+    //
+    // cubit.addStory(file);
 
-    // print(image!.path);
+    final List<XFile>? images = await _picker.pickMultiImage();
 
-    File file = File(image!.path);
+    List<File> paths = images!.map((xFile) => File(xFile.path)).toList();
 
-    cubit.addStory(file);
+    cubit.addStories(paths);
+
+    // List<File> imagesPaths = [];
+    //
+    // images?.forEach((element) {
+    //   imagesPaths.add(File(element.path));
+    // });
   }
 
   onShowStoryTapped(List<Story> storiesDetails) {

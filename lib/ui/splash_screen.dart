@@ -21,8 +21,15 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Timer(const Duration(milliseconds: 1500), () {
-      //  MyShared.getString(key: "username").isEmpty
-      //  FirebaseAuth.instance.signOut();
+      // MyShared.getString(key: "apiToken").isEmpty
+
+      // MyShared.putString(key: "apiToken", value: "");
+      // Navigator.pushReplacement
+      //    (context, MaterialPageRoute(builder: (context) => LoginScreen(),));
+
+      //  FirebaseAuth.instance.signOut().then((value) => Navigator.pushReplacement
+      //    (context, MaterialPageRoute(builder: (context) => LoginScreen(),)));
+
       if (FirebaseAuth.instance.currentUser == null) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => const LoginScreen()));
