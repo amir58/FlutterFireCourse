@@ -105,7 +105,8 @@ class _ChattingScreenState extends State<ChattingScreen> {
             itemBuilder: (context, index) {
               Message message = cubit.messages[index];
 
-              if (message.senderId == FirebaseAuth.instance.currentUser!.uid) {
+              if (message.senderId ==
+                  FirebaseAuth.instance.currentUser!.uid) {
                 return buildSenderMessage(message.message);
               } else {
                 return buildReceiverMessage(message.message);
@@ -119,27 +120,34 @@ class _ChattingScreenState extends State<ChattingScreen> {
 
   Widget buildSenderMessage(String message) {
     return Container(
-      margin:
-          EdgeInsets.only(top: 10.sp, bottom: 10.sp, right: 15.sp, left: 25.w),
-      padding: EdgeInsets.symmetric(
-        vertical: 15.sp,
-        horizontal: 10.sp,
-      ),
-      width: double.infinity,
       alignment: Alignment.centerRight,
-      decoration: BoxDecoration(
-        color: Colors.blue[200],
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(15.sp),
-          topRight: Radius.circular(15.sp),
-          bottomLeft: Radius.circular(15.sp),
+      child: Container(
+        margin: EdgeInsets.only(
+          top: 10.sp,
+          bottom: 10.sp,
+          right: 15.sp,
+          left: 25.w,
         ),
-      ),
-      child: Text(
-        message,
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 16.sp,
+        padding: EdgeInsets.symmetric(
+          vertical: 15.sp,
+          horizontal: 10.sp,
+        ),
+        // width: double.infinity,
+        // alignment: Alignment.centerRight,
+        decoration: BoxDecoration(
+          color: Colors.blue[200],
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15.sp),
+            topRight: Radius.circular(15.sp),
+            bottomLeft: Radius.circular(15.sp),
+          ),
+        ),
+        child: Text(
+          message,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16.sp,
+          ),
         ),
       ),
     );
@@ -147,31 +155,34 @@ class _ChattingScreenState extends State<ChattingScreen> {
 
   Widget buildReceiverMessage(String message) {
     return Container(
-      margin: EdgeInsets.only(
-        top: 10.sp,
-        bottom: 10.sp,
-        right: 25.w,
-        left: 15.sp,
-      ),
-      padding: EdgeInsets.symmetric(
-        vertical: 15.sp,
-        horizontal: 10.sp,
-      ),
-      width: double.infinity,
       alignment: Alignment.centerLeft,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(15.sp),
-          topRight: Radius.circular(15.sp),
-          bottomRight: Radius.circular(15.sp),
+      child: Container(
+        margin: EdgeInsets.only(
+          top: 10.sp,
+          bottom: 10.sp,
+          right: 25.w,
+          left: 15.sp,
         ),
-      ),
-      child: Text(
-        message,
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 16.sp,
+        padding: EdgeInsets.symmetric(
+          vertical: 15.sp,
+          horizontal: 10.sp,
+        ),
+        // width: double.infinity,
+        // alignment: Alignment.centerLeft,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15.sp),
+            topRight: Radius.circular(15.sp),
+            bottomRight: Radius.circular(15.sp),
+          ),
+        ),
+        child: Text(
+          message,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16.sp,
+          ),
         ),
       ),
     );

@@ -40,6 +40,16 @@ class ChattingCubit extends Cubit<ChattingStates> {
         .collection("chats")
         .doc(receiverId)
         .collection("messages")
+        // .snapshots()
+        // .listen((event) {
+        //   messages.clear();
+        //
+        //   for (var element in event.docs) {
+        //     Message message = Message.fromJson(element.data());
+        //     messages.add(message);
+        //   }
+        //   emit(GetMessagesSuccessState());
+        // });
         .get()
         .then((value) {
       messages.clear();
@@ -68,7 +78,14 @@ class ChattingCubit extends Cubit<ChattingStates> {
       print('Docs => ${event.docs.length}');
 
       Message message = Message.fromJson(event.docs[0].data());
-      messages.add(message);
+      print(message.message);
+      if (messages.last.time! != message.time) {
+        print('add new message');
+        messages.add(message);
+      }
+      else{
+        messages.last = message;
+      }
 
       emit(GetMessagesSuccessState());
     });
